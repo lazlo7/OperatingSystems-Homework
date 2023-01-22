@@ -1,1 +1,1 @@
-# OperatingSystems-Homework
+# Операционные системы: Домашние задания 
