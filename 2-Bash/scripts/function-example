@@ -1,0 +1,83 @@
+#!/bin/bash
+
+# Определяем фуункцию через "скобки"
+say_hello() {
+    echo "Hello from the parentheses!"
+}
+
+# Определяем функцию через ключевое слово "function"
+function say_hello2() {
+    echo "Hello from the 'function' keyword!"
+}
+
+# Вызываем функции
+say_hello
+say_hello2
+
+text="I'm from global scope!"
+echo "Before change_global_variable: $text"
+
+# Функция может изменять глобальные переменные
+function change_global_variable() {
+    text="I'm from change_global_variable function!"
+}
+
+change_global_variable
+echo "After change_global_variable: $text"
+
+# Для этого можно использовать ключевое слово "local"
+function change_local_variable() {
+    local text="I'm from change_global_variable function!"
+}
+
+change_local_variable
+echo "After change_local_variable: $text"
+
+# Фукнции в Bash не могут возвращать нецелочисленные значения.
+# В качестве возвращаемого значения используется код возврата последней команды.
+returnEcho() {
+    echo "Printing something..."
+}
+
+returnEcho
+# Для того, чтобы получить код возврата последней команды, используется переменная $?
+echo "Return code: $?"
+
+# Или же можно явно указать код возврата с помощью команды "return"
+return123() {
+    return 123
+}
+
+return123
+echo "Return code: $?"
+
+# Чтобы же вернуть, например, строку, придется использовать глобальную переменную
+placeholder=""
+returnString() {
+    placeholder="I'm from returnString function!"
+}
+
+returnString
+echo "Return string: $placeholder"
+
+# Функции могут принимать аргументы
+# $1 - первый аргумент, $2 - второй аргумент и т.д.
+function say_hello3() {
+    echo "Hello, $1!"
+}
+
+say_hello3 "Patrick"
+
+# $0 зарезервирован для имени функции
+function grocery_store() {
+    echo "I'm $0 and I have $1 apples, $2 oranges and $3 bananas."
+}
+
+grocery_store 10 11 12
+
+# Можно напечатать все переданные аргументы функции
+function print_all_arguments() {
+    echo "All arguments: $@"
+}
+
+print_all_arguments 1 "two" 3 "2+2" 5
