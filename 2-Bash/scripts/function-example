@@ -27,7 +27,7 @@ echo "After change_global_variable: $text"
 
 # Для этого можно использовать ключевое слово "local"
 function change_local_variable() {
-    local text="I'm from change_global_variable function!"
+    local text="I'm from change_local_variable function!"
 }
 
 change_local_variable
@@ -68,7 +68,7 @@ function say_hello3() {
 
 say_hello3 "Patrick"
 
-# $0 зарезервирован для имени функции
+# $0 зарезервирован для имени скрипта
 function grocery_store() {
     echo "I'm $0 and I have $1 apples, $2 oranges and $3 bananas."
 }
