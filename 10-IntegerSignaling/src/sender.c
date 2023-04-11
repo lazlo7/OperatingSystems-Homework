@@ -7,7 +7,7 @@
 #include <string.h>
 #include <unistd.h>
 
-// Returns the length of result_buffer.
+// The result_buffer must be at least of size sizeof(int) * 8.
 // The bits in result_buffer are stored in big endian order.
 void to_binary(int value, bool* result_buffer)
 {
@@ -16,7 +16,7 @@ void to_binary(int value, bool* result_buffer)
     }
 }
 
-// Has the current bit has been acknowledged.
+// Has the current bit been acknowledged.
 bool bitAcknowledged;
 
 void onAcknowledgementReceive(int signum)
