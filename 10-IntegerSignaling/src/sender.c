@@ -74,7 +74,7 @@ int main()
         exit(1);
     }
 
-    printf("[Sender] End of tranmission.\n");
+    printf("[Sender] End of transmission.\n");
 
     return 0;
 }
