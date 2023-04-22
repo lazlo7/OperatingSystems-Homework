@@ -1,9 +1,9 @@
 CC=gcc
 
-client: src/client.c
+client: src/client.c src/common.h
 	$(CC) src/client.c -o client
 
-server:	src/server.c
+server:	src/server.c src/common.h
 	$(CC) src/server.c -o server
 
 all: client server
