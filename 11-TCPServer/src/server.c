@@ -70,14 +70,14 @@ int main(int argc, char** argv)
     if (bind(sock, (struct sockaddr*)&server_addr, sizeof(server_addr)) == -1) {
         printf("[Server Error] Failed to bind to port %d: %s\n", server_port, strerror(errno));
         exit_code = 1;
-        goto cleanup;
+        goto cleanup_sock;
     }
 
     // Listen for incoming connections.
     if (listen(sock, MAX_CLIENTS) == -1) {
         printf("[Server Error] Failed to listen on port %d: %s\n", server_port, strerror(errno));
         exit_code = 1;
-        goto cleanup;
+        goto cleanup_sock;
     }
 
     printf("[Server] Started on port %d\n", server_port);
@@ -85,17 +85,25 @@ int main(int argc, char** argv)
     // Accept sender connection.
     printf("[Server] Waiting for sender to connect...\n");
     int const sender_sock = acceptConnection(sock, CLIENT_TYPE_SENDER);
+    if (sender_sock == -1) {
+        exit_code = 1;
+        goto cleanup_sock;
+    }
 
     // Accept receiver connection.
     printf("[Server] Waiting for receiver to connect...\n");
     int const receiver_sock = acceptConnection(sock, CLIENT_TYPE_RECEIVER);
+    if (receiver_sock == -1) {
+        exit_code = 1;
+        goto cleanup_sender_sock;
+    } 
 
     // Send a signal to sender to start transmission.
     // We do that just by sending a byte.
     if (send(sender_sock, "\0", 1, 0) == -1) {
         printf("[Server Error] Failed to send a signal to sender: %s\n", strerror(errno));
         exit_code = 1;
-        goto cleanup;
+        goto cleanup_receiver_sock;
     }
     printf("[Server] Sent a signal to sender to start transmission\n");
 
@@ -109,14 +117,14 @@ int main(int argc, char** argv)
         if (recv(sender_sock, buffer, sizeof(buffer), 0) == -1) {
             printf("[Server Error] Failed to receive data from sender: %s\n", strerror(errno));
             exit_code = 1;
-            goto cleanup;
+            goto cleanup_receiver_sock;
         }
 
         // Send data to receiver.
         if (send(receiver_sock, buffer, strlen(buffer), 0) == -1) {
             printf("[Server Error] Failed to send data to receiver: %s\n", strerror(errno));
             exit_code = 1;
-            goto cleanup;
+            goto cleanup_receiver_sock;
         }
 
         printf("[Server] Received from sender: \'%s\' -> Sent it to receiver\n", buffer);
@@ -127,7 +135,11 @@ int main(int argc, char** argv)
         }
     }
 
-cleanup:
+cleanup_receiver_sock:
+    close(receiver_sock);
+cleanup_sender_sock:
+    close(sender_sock);
+cleanup_sock:
     close(sock);
 
     printf("[Server] Exit.\n");
