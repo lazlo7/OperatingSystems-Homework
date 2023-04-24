@@ -10,9 +10,9 @@
 
 int sock;
 
-void printUsage()
+void printUsage(char const* cmd)
 {
-    printf("Usage: ./server <server_ip> [<server_port>]\n");
+    printf("Usage: %s <server_ip> [<server_port>]\n", cmd);
     printf("By default, <server_port> = %d\n", DEFAULT_PORT);
 }
 
@@ -32,7 +32,7 @@ void onInterruptReceived(int signum)
 int main(int argc, char** argv)
 {
     if (argc < 2) {
-        printUsage();
+        printUsage(argv[0]);
         printf("[Server Error] Missing required argument: <server_ip>.\n");
         return 1;
     }
