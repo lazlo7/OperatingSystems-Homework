@@ -57,7 +57,6 @@ int main(int argc, char** argv)
     }
 
     // Set broadcast option.
-    int exit_code = 0;
     int broadcast_perm = 1;
     if (setsockopt(sock, SOL_SOCKET, SO_BROADCAST, &broadcast_perm, sizeof(broadcast_perm)) == -1) {
         printf("[Server Error] Failed to set broadcast type: %s.\n", strerror(errno));
