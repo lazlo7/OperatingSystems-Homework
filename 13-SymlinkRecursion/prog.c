@@ -38,13 +38,13 @@ int main(void) {
     printf("Created starting file\n");
 
     char buffer[1024];
-    while (i != 300) {
+    for (;;) {
         ++i;
         strcpy(file_name_cur, OUT_DIR);
         getFileName(i, buffer);
         strcat(file_name_cur, buffer);
         
-        if (symlink(file_name_before, file_name_cur)) {
+        if (symlink(file_name_before, file_name_cur) == -1) {
             printf("[Error] Failed to create symlink: %s\n", strerror(errno));
             return 1;
         }
