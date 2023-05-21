@@ -6,6 +6,10 @@ prog: prog.c
 all: prog
 .DEFAULT_GOAL := all
 
-clean:
+# Remove all symlinks in ./out/, remove the original file '1', keep '.gitignore' 
+cleanout:
+	find out -maxdepth 1 -type l -delete
+	rm -f ./out/1
+
+clean: cleanout
 	rm -f prog
-	rm -f out/*
